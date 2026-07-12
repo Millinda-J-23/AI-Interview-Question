@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | AI Interview Question Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+<div class="auth-left">
+
+<div class="brand">
+
+
+<h1>AI Interview</h1>
+
+<p>
+
+Practice smarter with AI-generated interview questions.
+
+Prepare for placements with confidence.
+
+</p>
+
+</div>
+
+</div>
+
+<div class="auth-right">
+
+<form action="/login" method="POST" class="auth-card">
+
+<h2>Welcome Back</h2>
+
+<p class="subtitle">
+
+Login to continue your preparation.
+
+</p>
+
+<div class="input-box">
+
+<i class="fa-solid fa-envelope"></i>
+
+<input
+type="email"
+name="email"
+placeholder="Email Address"
+required>
+
+</div>
+
+<div class="input-box">
+
+<i class="fa-solid fa-lock"></i>
+
+<input
+type="password"
+name="password"
+placeholder="Password"
+required>
+
+</div>
+
+<button type="submit">
+
+Login
+
+</button>
+
+<p class="bottom-text">
+
+Don't have an account?
+
+<a href="/register">
+
+Create Account
+
+</a>
+
+</p>
+
+</form>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

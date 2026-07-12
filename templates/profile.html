@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Profile Hero -->
+
+    <div class="profile-hero">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <span class="hero-badge">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    User Profile
+
+                </span>
+
+                <h1 class="hero-title">
+
+                    Welcome, {{ current_user.username }}
+
+                </h1>
+
+                <p class="hero-desc">
+
+                    Manage your account, track your interview preparation,
+                    and access all AI Interview Generator features.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-center">
+
+                <div class="profile-avatar">
+
+                    {{ current_user.username[0]|upper }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- User Information -->
+
+    <div class="row mt-4">
+
+        <div class="col-md-6 mb-4">
+
+            <div class="profile-card">
+
+                <i class="fa-solid fa-user"></i>
+
+                <h5>Username</h5>
+
+                <h3>{{ current_user.username }}</h3>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6 mb-4">
+
+            <div class="profile-card">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <h5>Email Address</h5>
+
+                <h3>{{ current_user.email }}</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Statistics -->
+
+    <div class="row mt-2">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-file-lines"></i>
+
+                <h2>{{ total_interviews }}</h2>
+
+                <p>Total Interviews</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-robot"></i>
+
+                <h2>24/7</h2>
+
+                <p>AI Availability</p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="stat-card">
+
+                <i class="fa-solid fa-award"></i>
+
+                <h2>100%</h2>
+
+                <p>Placement Ready</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+
+    <div class="profile-actions">
+
+        <h3>
+
+            <i class="fa-solid fa-bolt"></i>
+
+            Quick Actions
+
+        </h3>
+
+        <div class="row mt-4">
+
+            <div class="col-md-3 mb-3">
+
+                <a href="/interview" class="btn btn-primary w-100 py-3">
+
+                    <i class="fa-solid fa-robot"></i><br>
+
+                    Generate Interview
+
+                </a>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <a href="/history" class="btn btn-success w-100 py-3">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i><br>
+
+                    History
+
+                </a>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <a href="/dashboard" class="btn btn-info w-100 py-3 text-white">
+
+                    <i class="fa-solid fa-house"></i><br>
+
+                    Dashboard
+
+                </a>
+
+            </div>
+
+            <div class="col-md-3 mb-3">
+
+                <a href="/logout" class="logout-btn w-100 py-3 d-block text-center">
+                    <i class="fa-solid fa-right-from-bracket"></i><br>
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

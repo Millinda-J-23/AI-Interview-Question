@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}View Interview Questions{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Hero -->
+
+    <div class="view-hero">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <span class="hero-badge">
+
+                    <i class="fa-solid fa-file-lines"></i>
+
+                    Saved Interview
+
+                </span>
+
+                <h1 class="hero-title">
+
+                    Interview Questions
+
+                </h1>
+
+                <p class="hero-desc">
+
+                    Review your previously generated AI interview questions and continue improving your placement preparation.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-center">
+
+                <div class="view-icon-card">
+
+                    <i class="fa-solid fa-clipboard-question"></i>
+
+                    <h3>AI Generated</h3>
+
+                    <p>Placement Practice</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Information Cards -->
+
+    <div class="row mt-4">
+
+        <div class="col-md-4 mb-4">
+
+            <div class="profile-card">
+
+                <i class="fa-solid fa-briefcase"></i>
+
+                <h5>Job Role</h5>
+
+                <h4>{{ record.role }}</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="profile-card">
+
+                <i class="fa-solid fa-star"></i>
+
+                <h5>Experience</h5>
+
+                <h4>{{ record.experience }}</h4>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-4">
+
+            <div class="profile-card">
+
+                <i class="fa-solid fa-code"></i>
+
+                <h5>Skills</h5>
+
+                <h4>{{ record.skills }}</h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Questions -->
+
+    <div class="question-result-card">
+
+        <div class="card-header-custom">
+
+            <h2>
+
+                <i class="fa-solid fa-list-check text-primary"></i>
+
+                Generated Questions
+
+            </h2>
+
+        </div>
+
+        <pre id="questions">{{ record.questions }}</pre>
+
+    </div>
+
+    <!-- Action Buttons -->
+
+<div class="action-toolbar mt-4">
+
+    <button class="btn custom-copy-btn" onclick="copyQuestions()">
+        <i class="fa-solid fa-copy"></i>
+        Copy
+    </button>
+
+    <button class="btn custom-print-btn" onclick="window.print()">
+        <i class="fa-solid fa-print"></i>
+        Print
+    </button>
+
+    <a href="{{ url_for('download', id=record.id) }}"
+       class="btn custom-download-btn">
+        <i class="fa-solid fa-file-pdf"></i>
+        Download PDF
+    </a>
+
+    <a href="{{ url_for('history') }}"
+       class="btn custom-history-btn">
+        <i class="fa-solid fa-clock-rotate-left"></i>
+        History
+    </a>
+
+    <a href="{{ url_for('interview') }}"
+       class="btn custom-generate-btn">
+        <i class="fa-solid fa-rotate"></i>
+        Generate Again
+    </a>
+
+</div>
+
+</div>
+
+<script>
+
+function copyQuestions(){
+
+    const text=document.getElementById("questions").innerText;
+
+    navigator.clipboard.writeText(text).then(function(){
+
+        alert("Questions copied successfully!");
+
+    });
+
+}
+
+</script>
+
+{% endblock %}

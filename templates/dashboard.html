@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | AI Interview Question Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<div class="logo">
+
+<h2>AI Interview</h2>
+
+</div>
+
+<ul>
+
+<li class="active">
+
+<a href="{{ url_for('dashboard') }}">
+
+<i class="fa-solid fa-house"></i>
+
+Dashboard
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('interview') }}">
+
+<i class="fa-solid fa-robot"></i>
+
+Generate Questions
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('history') }}">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+History
+
+</a>
+
+</li>
+
+<li>
+
+<a href="{{ url_for('profile') }}">
+
+<i class="fa-solid fa-user"></i>
+
+Profile
+
+</a>
+
+</li>
+
+<li class="logout-item">
+    <a href="{{ url_for('logout') }}" class="logout-link">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+    </a>
+</li>
+
+</ul>
+
+</div>
+
+<!-- Main -->
+
+<div class="main">
+
+<!-- Header -->
+
+<div class="topbar">
+
+<div>
+
+<h1>
+
+Welcome, {{ user.username }} 👋
+
+</h1>
+
+<p>
+
+Prepare for your dream placement with AI-powered interview questions.
+
+</p>
+
+</div>
+
+</div>
+
+<!-- Statistics -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+
+<div class="stat-icon blue">
+
+<i class="fa-solid fa-building"></i>
+
+</div>
+
+<div>
+
+<h2>150+</h2>
+
+<p>Companies</p>
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div class="stat-icon green">
+
+<i class="fa-solid fa-file-lines"></i>
+
+</div>
+
+<div>
+
+<h2>1200+</h2>
+
+<p>Questions</p>
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div class="stat-icon orange">
+
+<i class="fa-solid fa-code"></i>
+
+</div>
+
+<div>
+
+<h2>80+</h2>
+
+<p>Technical Skills</p>
+
+</div>
+
+</div>
+
+<div class="stat-card">
+
+<div class="stat-icon purple">
+
+<i class="fa-solid fa-chart-line"></i>
+
+</div>
+
+<div>
+
+<h2>{{ total_interviews }}</h2>
+
+<p>My Interviews</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Quick Actions -->
+
+<div class="quick-actions">
+
+<div class="action-card">
+
+<i class="fa-solid fa-robot"></i>
+
+<h3>Generate Questions</h3>
+
+<p>
+
+Generate AI-powered interview questions.
+
+</p>
+
+<a href="{{ url_for('interview') }}" class="action-btn">
+
+Start Now
+
+</a>
+
+</div>
+
+<div class="action-card">
+
+<i class="fa-solid fa-clock-rotate-left"></i>
+
+<h3>History</h3>
+
+<p>
+
+View all previously generated interview questions.
+
+</p>
+
+<a href="{{ url_for('history') }}" class="action-btn">
+
+Open
+
+</a>
+
+</div>
+
+<div class="action-card">
+
+<i class="fa-solid fa-user"></i>
+
+<h3>Profile</h3>
+
+<p>
+
+View your profile and interview statistics.
+
+</p>
+
+<a href="{{ url_for('profile') }}" class="action-btn">
+
+View
+
+</a>
+
+</div>
+
+</div>
+
+<!-- Placement Tips -->
+
+<div class="tips-section">
+
+<h2>
+
+<i class="fa-solid fa-lightbulb"></i>
+
+Placement Tips
+
+</h2>
+
+<div class="tips-grid">
+
+<div class="tip-card">
+
+<i class="fa-solid fa-building"></i>
+
+<h4>Research Company</h4>
+
+<p>
+
+Learn about the company's products, services and latest technologies.
+
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<i class="fa-solid fa-laptop-code"></i>
+
+<h4>Practice Coding</h4>
+
+<p>
+
+Focus on DSA, DBMS, Operating Systems, Computer Networks and OOP.
+
+</p>
+
+</div>
+
+<div class="tip-card">
+
+<i class="fa-solid fa-comments"></i>
+
+<h4>Communication</h4>
+
+<p>
+
+Explain your answers clearly and confidently.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<footer class="dashboard-footer">
+
+<p>
+
+© 2026 AI Interview Question Generator
+
+</p>
+
+</footer>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,358 @@
+{% extends "base.html" %}
+
+{% block title %}Generate Interview{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Hero Section -->
+    <div class="interview-hero">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7">
+
+                <span class="hero-badge">
+                    <i class="fa-solid fa-sparkles"></i>
+                    AI Powered Interview Preparation
+                </span>
+
+                <h1 class="hero-title">
+                    Generate Professional Interview Questions
+                </h1>
+
+                <p class="hero-desc">
+                    Practice company-specific interview questions based on your
+                    job role, experience, skills and difficulty level.
+                    Prepare confidently for placements using AI.
+                </p>
+
+            </div>
+
+            <div class="col-lg-5 text-center">
+
+                <div class="hero-image-card">
+
+                    <i class="fa-solid fa-robot hero-robot"></i>
+
+                    <h3 class="mt-4">
+                        Placement Ready
+                    </h3>
+
+                    <p>
+                        Personalized interview questions generated instantly.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Interview Form -->
+
+    <div class="card shadow-lg border-0 rounded-4 mt-5">
+
+        <div class="card-body p-5">
+
+            <h2 class="mb-4">
+                AI Interview
+            </h2>
+
+            <form id="interviewForm">
+
+                <div class="row g-4">
+
+                    <!-- Company -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Company
+                        </label>
+
+                        <select class="form-select form-select-lg"
+                                name="company"
+                                required>
+
+                            <option value="">Select Company</option>
+
+                            <option>TCS</option>
+                            <option>Infosys</option>
+                            <option>Wipro</option>
+                            <option>Accenture</option>
+                            <option>Cognizant</option>
+                            <option>Capgemini</option>
+                            <option>HCL</option>
+                            <option>Zoho</option>
+                            <option>IBM</option>
+                            <option>Oracle</option>
+                            <option>Google</option>
+                            <option>Microsoft</option>
+                            <option>Amazon</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Job Role -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Job Role
+                        </label>
+
+                        <select class="form-select form-select-lg"
+                                name="job_role"
+                                required>
+
+                            <option value="">Select Job Role</option>
+
+                            <option>Python Developer</option>
+                            <option>Java Developer</option>
+                            <option>Frontend Developer</option>
+                            <option>Backend Developer</option>
+                            <option>Full Stack Developer</option>
+                            <option>Software Engineer</option>
+                            <option>AI Engineer</option>
+                            <option>Machine Learning Engineer</option>
+                            <option>Data Scientist</option>
+                            <option>Data Analyst</option>
+                            <option>Cyber Security Analyst</option>
+                            <option>Cloud Engineer</option>
+                            <option>DevOps Engineer</option>
+                            <option>Flutter Developer</option>
+                            <option>Android Developer</option>
+                            <option>Web Developer</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Experience -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Experience
+                        </label>
+
+                        <select class="form-select form-select-lg"
+                                name="experience">
+
+                            <option>Fresher</option>
+                            <option>0-1 Years</option>
+                            <option>1-3 Years</option>
+                            <option>3-5 Years</option>
+                            <option>5+ Years</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Difficulty -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Difficulty
+                        </label>
+
+                        <select class="form-select form-select-lg"
+                                name="difficulty">
+
+                            <option>Easy</option>
+                            <option selected>Medium</option>
+                            <option>Hard</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Number of Questions -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+                            Number of Questions
+                        </label>
+
+                        <select class="form-select form-select-lg"
+                                name="count">
+
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+
+                        </select>
+
+                    </div>
+
+                    <!-- Skills -->
+
+                    <div class="col-12">
+
+                        <label class="form-label fw-semibold">
+                            Technical Skills
+                        </label>
+
+                        <textarea
+                            class="form-control"
+                            rows="6"
+                            name="skills"
+                            placeholder="Example:
+
+Python
+Flask
+HTML
+CSS
+JavaScript
+SQL
+DBMS
+Operating System
+Computer Networks"
+                            required></textarea>
+
+                    </div>
+
+                    <!-- Submit Button -->
+
+                    <div class="col-12 text-center mt-4">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg px-5 py-3">
+
+                            <i class="fa-solid fa-robot me-2"></i>
+
+                            Generate AI Questions
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= AI Loading Overlay ================= -->
+
+<div class="loading-overlay" id="loadingOverlay">
+
+    <div class="loading-card">
+
+        <i class="fa-solid fa-robot hero-robot"></i>
+
+        <h2 id="loadingTitle">
+            Generating Interview Questions
+        </h2>
+
+        <p id="loadingMessage">
+            Initializing AI...
+        </p>
+
+        <div class="ai-progress">
+
+            <div class="ai-progress-bar" id="progressBar">
+
+                <span id="percentText">
+                    0%
+                </span>
+
+            </div>
+
+        </div>
+
+        <p class="loading-note">
+            Please wait while our AI prepares personalized interview questions for you.
+        </p>
+
+    </div>
+
+</div>
+
+    <!-- ================= INTERVIEW TIPS ================= -->
+
+    <div class="tips-section mt-5">
+
+        <h2 class="text-center mb-5">
+            <i class="fa-solid fa-lightbulb text-warning"></i>
+            Interview Preparation Tips
+        </h2>
+
+        <div class="row g-4">
+
+            <div class="col-md-4">
+
+                <div class="tip-card h-100">
+
+                    <i class="fa-solid fa-book-open"></i>
+
+                    <h4>Know Fundamentals</h4>
+
+                    <p>
+                        Revise DBMS, Operating System, Computer Networks,
+                        OOP, SQL and Data Structures before attending interviews.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="tip-card h-100">
+
+                    <i class="fa-solid fa-code"></i>
+
+                    <h4>Practice Coding</h4>
+
+                    <p>
+                        Solve coding problems every day and improve your
+                        logical thinking and debugging skills.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="tip-card h-100">
+
+                    <i class="fa-solid fa-comments"></i>
+
+                    <h4>Communicate Clearly</h4>
+
+                    <p>
+                        Explain your approach confidently during technical
+                        and HR interview rounds.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+
+{% endblock %}

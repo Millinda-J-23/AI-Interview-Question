@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+
+{% block title %}Interview History{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Hero -->
+
+    <div class="history-hero">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+
+                <span class="hero-badge">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Interview Records
+
+                </span>
+
+                <h1 class="hero-title">
+
+                    AI Interview History
+
+                </h1>
+
+                <p class="hero-desc">
+
+                    View, manage and review all your previously generated
+                    interview questions. Track your preparation progress.
+
+                </p>
+
+            </div>
+
+            <div class="col-lg-4 text-center">
+
+                <div class="history-icon-card">
+
+                    <i class="fa-solid fa-folder-open"></i>
+
+                    <h3>{{ records|length }}</h3>
+
+                    <p>Total Interviews</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% if records %}
+
+    <!-- Search -->
+
+    <div class="search-box mb-4">
+
+        <input
+            type="text"
+            id="historySearch"
+            class="form-control"
+            placeholder="Search by job role or skill...">
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="history-card">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle table-hover" id="historyTable">
+
+                <thead>
+
+                    <tr>
+
+                        <th>#</th>
+
+                        <th>Job Role</th>
+
+                        <th>Experience</th>
+
+                        <th>Skills</th>
+
+                        <th>Date</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for record in records %}
+
+                <tr>
+
+                    <td>
+
+                        {{ loop.index }}
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge bg-primary">
+
+                            {{ record.role }}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {{ record.experience }}
+
+                    </td>
+
+                    <td>
+
+                        {{ record.skills }}
+
+                    </td>
+
+                    <td>
+
+                        {{ record.created_at.strftime('%d %b %Y %I:%M %p') }}
+
+                    </td>
+
+                    <td>
+
+                        <a href="{{ url_for('view', id=record.id) }}"
+                           class="btn btn-success btn-sm">
+
+                            <i class="fa-solid fa-eye"></i>
+
+                            View
+
+                        </a>
+
+                        <a href="{{ url_for('delete', id=record.id) }}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this interview history?')">
+
+                            <i class="fa-solid fa-trash"></i>
+
+                            Delete
+
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+                                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-history">
+
+        <i class="fa-solid fa-folder-open"></i>
+
+        <h2>No Interview History</h2>
+
+        <p>
+
+            You haven't generated any interview questions yet.
+            Start your preparation now with AI-powered questions.
+
+        </p>
+
+        <a href="{{ url_for('interview') }}"
+           class="btn btn-primary btn-lg">
+
+            <i class="fa-solid fa-robot"></i>
+
+            Generate Interview
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<script>
+
+const search=document.getElementById("historySearch");
+
+if(search){
+
+search.addEventListener("keyup",function(){
+
+let value=this.value.toLowerCase();
+
+let rows=document.querySelectorAll("#historyTable tbody tr");
+
+rows.forEach(function(row){
+
+let text=row.innerText.toLowerCase();
+
+row.style.display=text.includes(value)?"":"none";
+
+});
+
+});
+
+}
+
+</script>
+
+{% endblock %}

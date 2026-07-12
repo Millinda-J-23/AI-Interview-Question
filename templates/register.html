@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | AI Interview Question Generator</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <!-- Left Side -->
+
+    <div class="auth-left">
+
+        <div class="brand">
+
+            <i class="fa-solid fa-user-graduate"></i>
+
+            <h1>Start Your Interview Journey</h1>
+
+            <p>
+                Create your account and generate AI-powered interview
+                questions for your dream company.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- Right Side -->
+
+    <div class="auth-right">
+
+        <form action="{{ url_for('register') }}"
+              method="POST"
+              class="auth-card">
+
+            <h2>Create Account</h2>
+
+            <p class="subtitle">
+                Join thousands of placement aspirants.
+            </p>
+
+            <!-- Flash Messages -->
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+
+                {% endfor %}
+
+            {% endif %}
+            {% endwith %}
+
+            <!-- Username -->
+
+            <div class="input-box">
+
+                <i class="fa-solid fa-user"></i>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    required>
+
+            </div>
+
+            <!-- Email -->
+
+            <div class="input-box">
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                    required>
+
+            </div>
+
+            <!-- Password -->
+
+            <div class="input-box">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required>
+
+            </div>
+
+            <!-- Confirm Password -->
+
+            <div class="input-box">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    name="confirm_password"
+                    placeholder="Confirm Password"
+                    required>
+
+            </div>
+
+            <button type="submit">
+                Create Account
+            </button>
+
+            <p class="bottom-text">
+
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+            </p>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
