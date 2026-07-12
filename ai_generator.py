@@ -1,7 +1,9 @@
 import os
+import time
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+
 # ============================================
 # Gemini API Key
 # ============================================
@@ -42,18 +44,27 @@ Rules:
 6. Return ONLY a numbered list.
 """
 
-    try:
+    for attempt in range(3):
+        try:
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7,
+                    max_output_tokens=2048,
+                ),
+            )
 
-        response = client.models.generate_content(
-            model="gemini-flash-latest",
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=0.7,
-                max_output_tokens=2048,
-            ),
-        )
+            return response.text
 
-        return response.text
+        except Exception as e:
+            error = str(e)
 
-    except Exception as e:
-        return f"Error generating questions: {str(e)}"
+            # Retry if Gemini is temporarily unavailable
+            if "503" in error and attempt < 2:
+                time.sleep(5)
+                continue
+
+            return f"Error generating questions: {error}"
+
+    return "Gemini is busy. Please try again after a few minutes."
