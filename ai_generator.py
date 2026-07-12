@@ -59,12 +59,12 @@ Rules:
 
         except Exception as e:
             error = str(e)
+            print("Gemini Error:", error)  # This will appear in Render logs
 
-            # Retry if Gemini is temporarily unavailable
             if "503" in error and attempt < 2:
                 time.sleep(5)
                 continue
 
-            return f"Error generating questions: {error}"
+            raise Exception(error)
 
     return "Gemini is busy. Please try again after a few minutes."
