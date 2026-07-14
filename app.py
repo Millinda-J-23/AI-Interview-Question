@@ -84,7 +84,16 @@ def load_user(user_id):
 def home():
     return render_template("index.html")
 
+# =====================================================
+# Health Check (Render)
+# =====================================================
 
+@app.route("/health")
+def health():
+
+    return jsonify({
+        "status": "running"
+    })
 # =====================================================
 # Register
 # =====================================================
