@@ -6,7 +6,7 @@ An AI-powered web application that helps students and job seekers prepare for in
 https://ai-interview-question.onrender.com/
 
 ## 💻 GitHub Repository
-https://github.com/Millinda-J-23/AI-Interview-Question-Generator
+https://github.com/Millinda-J-23/AI-Interview-Question
 
 ## ✨ Features
 
