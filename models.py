@@ -1,6 +1,7 @@
 from database import db
 from flask_login import UserMixin
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
 # =====================================================
@@ -67,9 +68,9 @@ class InterviewHistory(db.Model):
     )
 
     created_at = db.Column(
-        db.DateTime,
-        default=datetime.utcnow
-    )
+    db.DateTime,
+    default=lambda: datetime.now(ZoneInfo("Asia/Kolkata"))
+)
 
 
 # =====================================================

@@ -354,6 +354,23 @@ def result(history_id):
         flash("Access Denied.", "danger")
         return redirect(url_for("history"))
 
+    # Create an empty feedback record if it doesn't exist
+    existing = Feedback.query.filter_by(
+        username=current_user.username,
+        feedback=""
+    ).first()
+
+    if not existing:
+
+        feedback = Feedback(
+            username=current_user.username,
+            rating=0,
+            feedback=""
+        )
+
+        db.session.add(feedback)
+        db.session.commit()
+
     return render_template(
         "result.html",
         questions=record.questions,
@@ -362,11 +379,9 @@ def result(history_id):
         skills=record.skills,
         history_id=record.id
     )
-
 # =====================================================
 # Submit Feedback
 # =====================================================
-
 @app.route("/feedback", methods=["POST"])
 @login_required
 def feedback():
@@ -376,13 +391,26 @@ def feedback():
         rating = request.form.get("rating")
         feedback_text = request.form.get("feedback")
 
-        new_feedback = Feedback(
+        existing = Feedback.query.filter_by(
             username=current_user.username,
-            rating=int(rating),
-            feedback=feedback_text
-        )
+            feedback=""
+        ).first()
 
-        db.session.add(new_feedback)
+        if existing:
+
+            existing.rating = int(rating)
+            existing.feedback = feedback_text
+
+        else:
+
+            new_feedback = Feedback(
+                username=current_user.username,
+                rating=int(rating),
+                feedback=feedback_text
+            )
+
+            db.session.add(new_feedback)
+
         db.session.commit()
 
         return jsonify({
