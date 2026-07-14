@@ -354,5 +354,67 @@ Computer Networks"
 {% block scripts %}
 
 <script src="{{ url_for('static', filename='js/interview.js') }}"></script>
+<!-- ================= RATING & FEEDBACK ================= -->
+
+<div class="feedback-section mt-5">
+
+    <div class="card shadow-lg border-0 rounded-4">
+
+        <div class="card-body p-4">
+
+            <h3 class="text-center mb-4">
+                ⭐ Rate Your Experience
+            </h3>
+
+            <div class="text-center mb-4">
+
+                <input type="radio" name="rating" id="star5" value="5">
+                <label for="star5">⭐</label>
+
+                <input type="radio" name="rating" id="star4" value="4">
+                <label for="star4">⭐</label>
+
+                <input type="radio" name="rating" id="star3" value="3">
+                <label for="star3">⭐</label>
+
+                <input type="radio" name="rating" id="star2" value="2">
+                <label for="star2">⭐</label>
+
+                <input type="radio" name="rating" id="star1" value="1">
+                <label for="star1">⭐</label>
+
+            </div>
+
+            <div class="mb-3">
+
+                <textarea
+                    id="feedback"
+                    class="form-control"
+                    rows="5"
+                    placeholder="Share your feedback about the AI interview questions..."></textarea>
+
+            </div>
+
+            <div class="text-center">
+
+                <button
+                    class="btn btn-success px-4"
+                    onclick="submitFeedback()">
+
+                    Submit Feedback
+
+                </button>
+
+            </div>
+
+            <p id="feedbackMessage"
+               class="text-success text-center mt-3 fw-bold">
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

@@ -166,6 +166,67 @@
         </a>
 
     </div>
+    <!-- ================= Rating & Feedback ================= -->
+
+<div class="card shadow-lg border-0 rounded-4 mt-5">
+
+    <div class="card-body">
+
+        <h3 class="text-center mb-4">
+            ⭐ Rate Your Experience
+        </h3>
+
+        <div class="text-center mb-4">
+
+            <div class="btn-group" role="group">
+
+                <input type="radio" class="btn-check" name="rating" id="r1" value="1">
+                <label class="btn btn-outline-warning" for="r1">1 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="r2" value="2">
+                <label class="btn btn-outline-warning" for="r2">2 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="r3" value="3">
+                <label class="btn btn-outline-warning" for="r3">3 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="r4" value="4">
+                <label class="btn btn-outline-warning" for="r4">4 ⭐</label>
+
+                <input type="radio" class="btn-check" name="rating" id="r5" value="5">
+                <label class="btn btn-outline-warning" for="r5">5 ⭐</label>
+
+            </div>
+
+        </div>
+
+        <textarea
+            id="feedback"
+            class="form-control"
+            rows="5"
+            placeholder="Share your feedback about the interview questions..."></textarea>
+
+        <div class="text-center mt-4">
+
+            <button
+                class="btn btn-success"
+                onclick="submitFeedback()">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                Submit Feedback
+
+            </button>
+
+        </div>
+
+        <p
+            id="feedbackMessage"
+            class="text-success text-center mt-3 fw-bold">
+        </p>
+
+    </div>
+
+</div>
 
 </div>
 
@@ -178,6 +239,58 @@ function copyQuestions(){
     navigator.clipboard.writeText(text).then(function(){
 
         alert("Questions copied successfully!");
+
+    });
+
+}
+
+function submitFeedback(){
+
+    const rating = document.querySelector('input[name="rating"]:checked');
+
+    if(!rating){
+
+        alert("Please select a rating.");
+
+        return;
+
+    }
+
+    const feedback = document.getElementById("feedback").value;
+
+    fetch("/feedback",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+
+        body:`rating=${rating.value}&feedback=${encodeURIComponent(feedback)}`
+
+    })
+
+    .then(response=>response.json())
+
+    .then(data=>{
+
+        document.getElementById("feedbackMessage").innerHTML=data.message;
+
+        document.getElementById("feedback").value="";
+
+        document.querySelectorAll('input[name="rating"]').forEach(function(item){
+
+            item.checked=false;
+
+        });
+
+    })
+
+    .catch(error=>{
+
+        alert("Failed to submit feedback.");
+
+        console.log(error);
 
     });
 

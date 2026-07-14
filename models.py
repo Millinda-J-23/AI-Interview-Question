@@ -3,6 +3,10 @@ from flask_login import UserMixin
 from datetime import datetime
 
 
+# =====================================================
+# User Model
+# =====================================================
+
 class User(UserMixin, db.Model):
 
     __tablename__ = "users"
@@ -26,6 +30,10 @@ class User(UserMixin, db.Model):
         nullable=False
     )
 
+
+# =====================================================
+# Interview History Model
+# =====================================================
 
 class InterviewHistory(db.Model):
 
@@ -54,6 +62,40 @@ class InterviewHistory(db.Model):
     )
 
     questions = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+
+# =====================================================
+# Feedback Model
+# =====================================================
+
+class Feedback(db.Model):
+
+    __tablename__ = "feedback"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    username = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    rating = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    feedback = db.Column(
         db.Text,
         nullable=False
     )
