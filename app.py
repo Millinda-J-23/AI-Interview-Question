@@ -25,7 +25,7 @@ from werkzeug.security import (
 from config import Config
 from database import db
 from models import User, InterviewHistory, Feedback
-from ai_generator import generate_questions
+
 
 from reportlab.platypus import (
     SimpleDocTemplate,
@@ -50,7 +50,10 @@ app.config.from_object(Config)
 db.init_app(app)
 
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()
+    except Exception as e:
+        print("Database initialization error:", e)
 
 
 # =====================================================
@@ -246,8 +249,8 @@ def interview():
 
         try:
 
-            # Optional loading effect
-            time.sleep(1)
+            # No delay in production
+            from ai_generator import generate_questions
 
             questions = generate_questions(
                 company=company,
@@ -308,6 +311,7 @@ def generate_questions_api():
         except ValueError:
             count = 5
 
+        from ai_generator import generate_questions
         questions = generate_questions(
             company,
             role,
@@ -682,6 +686,5 @@ if __name__ == "__main__":
 
     app.run(
         host="0.0.0.0",
-        port=5000,
-        debug=True
+        port=5000
     )
