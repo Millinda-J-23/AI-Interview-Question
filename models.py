@@ -5,6 +5,14 @@ from zoneinfo import ZoneInfo
 
 
 # =====================================================
+# Indian Time Function
+# =====================================================
+
+def indian_time():
+    return datetime.now(ZoneInfo("Asia/Kolkata"))
+
+
+# =====================================================
 # User Model
 # =====================================================
 
@@ -12,7 +20,10 @@ class User(UserMixin, db.Model):
 
     __tablename__ = "users"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
     username = db.Column(
         db.String(100),
@@ -40,7 +51,10 @@ class InterviewHistory(db.Model):
 
     __tablename__ = "interview_history"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
     username = db.Column(
         db.String(100),
@@ -68,9 +82,10 @@ class InterviewHistory(db.Model):
     )
 
     created_at = db.Column(
-    db.DateTime,
-    default=lambda: datetime.now(ZoneInfo("Asia/Kolkata"))
-)
+        db.DateTime,
+        default=indian_time,
+        nullable=False
+    )
 
 
 # =====================================================
@@ -103,5 +118,6 @@ class Feedback(db.Model):
 
     created_at = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=indian_time,
+        nullable=False
     )
