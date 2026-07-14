@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Feedback{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="mb-4 text-center">
+        User Feedback
+    </h2>
+
+    {% if feedbacks %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-dark">
+
+                <tr>
+
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                    <th>Date & Time</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in feedbacks %}
+
+                <tr>
+
+                    <td>{{ item.id }}</td>
+
+                    <td>{{ item.username }}</td>
+
+                    <td>{{ item.rating }} ⭐</td>
+
+                    <td>
+
+                        {% if item.feedback %}
+
+                            {{ item.feedback }}
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                No Feedback
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.created_at.strftime('%d-%m-%Y %I:%M %p') }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+        <div class="alert alert-info text-center">
+
+            No feedback has been submitted yet.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
