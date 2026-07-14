@@ -5,8 +5,8 @@ from flask import (
     redirect,
     url_for,
     flash,
-    jsonify,
-    make_response
+    make_response,
+    jsonify
 )
 
 from flask_login import (
@@ -29,43 +29,29 @@ from ai_generator import generate_questions
 
 from reportlab.platypus import (
     SimpleDocTemplate,
-    Paragraph,
-    Spacer
+    Paragraph
 )
 from reportlab.lib.styles import getSampleStyleSheet
-
-from xml.sax.saxutils import escape
 
 import io
 import time
 
-
-# =====================================================
+# =====================================
 # Flask Configuration
-# =====================================================
+# =====================================
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
 
-with app.app_context():
-    db.create_all()
-
-
-# =====================================================
+# =====================================
 # Login Manager
-# =====================================================
+# =====================================
 
 login_manager = LoginManager()
-
 login_manager.init_app(app)
-
 login_manager.login_view = "login"
-
-login_manager.login_message = "Please login first."
-
-login_manager.login_message_category = "warning"
 
 
 @login_manager.user_loader
@@ -73,49 +59,46 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-# =====================================================
+with app.app_context():
+    db.create_all()
+
+
+# =====================================
 # Home
-# =====================================================
+# =====================================
 
 @app.route("/")
 def home():
     return render_template("index.html")
 
 
-# =====================================================
+# =====================================
 # Register
-# =====================================================
+# =====================================
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
-    if current_user.is_authenticated:
-        return redirect(url_for("dashboard"))
-
     if request.method == "POST":
 
         username = request.form.get("username", "").strip()
-        email = request.form.get("email", "").strip().lower()
+        email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
-        confirm = request.form.get("confirm_password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        if not username or not email or not password or not confirm:
-
-            flash("Please fill all fields.", "danger")
+        if not username or not email or not password or not confirm_password:
+            flash("Please fill in all fields.", "danger")
             return redirect(url_for("register"))
 
-        if password != confirm:
-
+        if password != confirm_password:
             flash("Passwords do not match.", "danger")
             return redirect(url_for("register"))
 
         if User.query.filter_by(username=username).first():
-
             flash("Username already exists.", "danger")
             return redirect(url_for("register"))
 
         if User.query.filter_by(email=email).first():
-
             flash("Email already registered.", "danger")
             return redirect(url_for("register"))
 
@@ -139,19 +122,16 @@ def register():
     return render_template("register.html")
 
 
-# =====================================================
+# =====================================
 # Login
-# =====================================================
+# =====================================
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-    if current_user.is_authenticated:
-        return redirect(url_for("dashboard"))
-
     if request.method == "POST":
 
-        email = request.form.get("email", "").strip().lower()
+        email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
 
         user = User.query.filter_by(email=email).first()
@@ -167,9 +147,9 @@ def login():
         flash("Invalid Email or Password", "danger")
 
     return render_template("login.html")
-    # =====================================================
+# =====================================
 # Dashboard
-# =====================================================
+# =====================================
 
 @app.route("/dashboard")
 @login_required
@@ -179,26 +159,17 @@ def dashboard():
         username=current_user.username
     ).count()
 
-    recent_history = (
-        InterviewHistory.query.filter_by(
-            username=current_user.username
-        )
-        .order_by(InterviewHistory.created_at.desc())
-        .limit(5)
-        .all()
-    )
-
     return render_template(
         "dashboard.html",
         user=current_user,
         total_interviews=total_interviews,
-        recent_history=recent_history
+        questions=[]
     )
 
 
-# =====================================================
+# =====================================
 # Profile
-# =====================================================
+# =====================================
 
 @app.route("/profile")
 @login_required
@@ -215,47 +186,48 @@ def profile():
     )
 
 
-# =====================================================
+# =====================================
 # Interview
-# =====================================================
-
+# =====================================
 @app.route("/interview", methods=["GET", "POST"])
 @login_required
 def interview():
 
     if request.method == "POST":
 
-        company = request.form.get("company", "").strip()
-        role = request.form.get("job_role", "").strip()
-        experience = request.form.get("experience", "").strip()
-        difficulty = request.form.get("difficulty", "").strip()
-        skills = request.form.get("skills", "").strip()
-
-        try:
-            count = int(request.form.get("count", 5))
-        except ValueError:
-            count = 5
+        company = request.form.get("company")
+        role = request.form.get("job_role")
+        experience = request.form.get("experience")
+        difficulty = request.form.get("difficulty")
+        skills = request.form.get("skills")
+        count = request.form.get("count", "3")
 
         if not role:
             flash("Please select a Job Role.", "danger")
             return redirect(url_for("interview"))
 
         if not skills:
-            flash("Please enter Technical Skills.", "danger")
+            flash("Please enter your technical skills.", "danger")
             return redirect(url_for("interview"))
 
         try:
 
-            # Optional loading effect
-            time.sleep(1)
+            time.sleep(5)
+
+            company = request.form.get("company")
+            role = request.form.get("job_role")
+            experience = request.form.get("experience")
+            difficulty = request.form.get("difficulty")
+            skills = request.form.get("skills")
+            count = request.form.get("count", "3")
 
             questions = generate_questions(
-                company=company,
-                role=role,
-                experience=experience,
-                difficulty=difficulty,
-                skills=skills,
-                count=count
+                company,
+                role,
+                experience,
+                difficulty,
+                skills,
+                count
             )
 
             history = InterviewHistory(
@@ -269,27 +241,26 @@ def interview():
             db.session.add(history)
             db.session.commit()
 
-            flash("Interview Questions Generated Successfully!", "success")
-
-            return redirect(
-                url_for(
-                    "result",
-                    history_id=history.id
-                )
+            return render_template(
+                "result.html",
+                questions=questions,
+                role=role,
+                experience=experience,
+                skills=skills,
+                history_id=history.id
             )
 
         except Exception as e:
-
-            flash(f"AI Error: {str(e)}", "danger")
-
+            flash(f"AI Error: {e}", "danger")
             return redirect(url_for("interview"))
 
     return render_template("interview.html")
-
-
-# =====================================================
-# AJAX API
-# =====================================================
+# =====================================
+# API (Future AJAX Support)
+# =====================================
+# =====================================
+# AJAX Generate Questions
+# =====================================
 
 @app.route("/generate_questions", methods=["POST"])
 @login_required
@@ -302,11 +273,7 @@ def generate_questions_api():
         experience = request.form.get("experience", "")
         difficulty = request.form.get("difficulty", "")
         skills = request.form.get("skills", "")
-
-        try:
-            count = int(request.form.get("count", 5))
-        except ValueError:
-            count = 5
+        count = request.form.get("count", "3")
 
         questions = generate_questions(
             company,
@@ -314,7 +281,7 @@ def generate_questions_api():
             experience,
             difficulty,
             skills,
-            count
+            int(count)
         )
 
         history = InterviewHistory(
@@ -330,8 +297,7 @@ def generate_questions_api():
 
         return jsonify({
             "success": True,
-            "history_id": history.id,
-            "questions": questions
+            "history_id": history.id
         })
 
     except Exception as e:
@@ -340,9 +306,10 @@ def generate_questions_api():
             "success": False,
             "message": str(e)
         }), 500
-        # =====================================================
+
+# =====================================
 # Result Page
-# =====================================================
+# =====================================
 
 @app.route("/result/<int:history_id>")
 @login_required
@@ -351,7 +318,7 @@ def result(history_id):
     record = InterviewHistory.query.get_or_404(history_id)
 
     if record.username != current_user.username:
-        flash("Access Denied.", "danger")
+        flash("Access Denied", "danger")
         return redirect(url_for("history"))
 
     return render_template(
@@ -362,22 +329,19 @@ def result(history_id):
         skills=record.skills,
         history_id=record.id
     )
-
-
-# =====================================================
+# =====================================
 # Interview History
-# =====================================================
+# =====================================
 
 @app.route("/history")
 @login_required
 def history():
 
-    records = (
-        InterviewHistory.query
-        .filter_by(username=current_user.username)
-        .order_by(InterviewHistory.created_at.desc())
-        .all()
-    )
+    records = InterviewHistory.query.filter_by(
+        username=current_user.username
+    ).order_by(
+        InterviewHistory.created_at.desc()
+    ).all()
 
     return render_template(
         "history.html",
@@ -385,9 +349,9 @@ def history():
     )
 
 
-# =====================================================
-# View Questions
-# =====================================================
+# =====================================
+# View Interview
+# =====================================
 
 @app.route("/view/<int:id>")
 @login_required
@@ -397,8 +361,7 @@ def view(id):
 
     if record.username != current_user.username:
 
-        flash("Access Denied.", "danger")
-
+        flash("Access Denied", "danger")
         return redirect(url_for("history"))
 
     return render_template(
@@ -407,9 +370,9 @@ def view(id):
     )
 
 
-# =====================================================
+# =====================================
 # Delete Interview
-# =====================================================
+# =====================================
 
 @app.route("/delete/<int:id>")
 @login_required
@@ -419,12 +382,10 @@ def delete(id):
 
     if record.username != current_user.username:
 
-        flash("Access Denied.", "danger")
-
+        flash("Access Denied", "danger")
         return redirect(url_for("history"))
 
     db.session.delete(record)
-
     db.session.commit()
 
     flash("Interview deleted successfully.", "success")
@@ -432,26 +393,9 @@ def delete(id):
     return redirect(url_for("history"))
 
 
-# =====================================================
-# Delete All Interviews
-# =====================================================
-
-@app.route("/delete_all")
-@login_required
-def delete_all():
-
-    InterviewHistory.query.filter_by(
-        username=current_user.username
-    ).delete()
-
-    db.session.commit()
-
-    flash("All interview history deleted successfully.", "success")
-
-    return redirect(url_for("history"))
-    # =====================================================
+# =====================================
 # Download PDF
-# =====================================================
+# =====================================
 
 @app.route("/download/<int:id>")
 @login_required
@@ -460,7 +404,8 @@ def download(id):
     record = InterviewHistory.query.get_or_404(id)
 
     if record.username != current_user.username:
-        flash("Access Denied.", "danger")
+
+        flash("Access Denied", "danger")
         return redirect(url_for("history"))
 
     buffer = io.BytesIO()
@@ -478,82 +423,64 @@ def download(id):
         )
     )
 
-    story.append(Spacer(1, 15))
-
     story.append(
         Paragraph(
-            f"<b>User:</b> {escape(current_user.username)}",
+            f"<b>Username:</b> {current_user.username}",
             styles["BodyText"]
         )
     )
 
     story.append(
         Paragraph(
-            f"<b>Role:</b> {escape(record.role)}",
+            f"<b>Role:</b> {record.role}",
             styles["BodyText"]
         )
     )
 
     story.append(
         Paragraph(
-            f"<b>Experience:</b> {escape(record.experience)}",
+            f"<b>Experience:</b> {record.experience}",
             styles["BodyText"]
         )
     )
 
     story.append(
         Paragraph(
-            f"<b>Skills:</b> {escape(record.skills)}",
+            f"<b>Skills:</b> {record.skills}",
             styles["BodyText"]
         )
     )
 
-    story.append(Spacer(1, 20))
-
     story.append(
         Paragraph(
-            "Generated Interview Questions",
+            "<br/><b>Generated Questions</b>",
             styles["Heading2"]
         )
     )
 
-    story.append(Spacer(1, 10))
-
-    # Split questions line by line
-    for line in record.questions.split("\n"):
-
-        line = line.strip()
-
-        if line:
-
-            story.append(
-                Paragraph(
-                    escape(line),
-                    styles["BodyText"]
-                )
-            )
-
-            story.append(Spacer(1, 8))
+    story.append(
+        Paragraph(
+            record.questions.replace("\n", "<br/>"),
+            styles["BodyText"]
+        )
+    )
 
     doc.build(story)
 
     pdf = buffer.getvalue()
-
     buffer.close()
 
     response = make_response(pdf)
 
     response.headers["Content-Type"] = "application/pdf"
-
     response.headers["Content-Disposition"] = (
         f'attachment; filename="Interview_{record.id}.pdf"'
     )
 
     return response
-    
-# =====================================================
+# =====================================
 # Logout
-# =====================================================
+# =====================================
 
 @app.route("/logout")
 @login_required
@@ -566,40 +493,30 @@ def logout():
     return redirect(url_for("home"))
 
 
-# =====================================================
-# 404 Error
-# =====================================================
+# =====================================
+# Error Handlers
+# =====================================
 
 @app.errorhandler(404)
 def page_not_found(error):
 
-    return render_template(
-        "404.html"
-    ), 404
+    return render_template("404.html"), 404
 
-
-# =====================================================
-# 500 Error
-# =====================================================
 
 @app.errorhandler(500)
 def internal_server_error(error):
 
     db.session.rollback()
 
-    return render_template(
-        "500.html"
-    ), 500
+    return render_template("500.html"), 500
 
 
-# =====================================================
-# Run Flask App
-# =====================================================
+# =====================================
+# Run Application
+# =====================================
 
 if __name__ == "__main__":
 
     app.run(
-        host="0.0.0.0",
-        port=5000,
         debug=True
     )
