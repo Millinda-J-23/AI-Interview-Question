@@ -467,18 +467,38 @@ def history():
 @login_required
 def admin_feedback():
 
-    # Change this username to your admin username
+    # Only admin can access
     if current_user.username != "Millinda-J-23":
         flash("Access Denied.", "danger")
         return redirect(url_for("dashboard"))
 
-    feedbacks = Feedback.query.order_by(
-        Feedback.created_at.desc()
-    ).all()
+    users = User.query.order_by(User.username.asc()).all()
+
+    data = []
+
+    for user in users:
+
+        feedback = (
+            Feedback.query
+            .filter_by(username=user.username)
+            .order_by(Feedback.created_at.desc())
+            .first()
+        )
+
+        data.append({
+            "username": user.username,
+            "rating": feedback.rating if feedback else "-",
+            "feedback": (
+                feedback.feedback
+                if feedback and feedback.feedback
+                else "No Feedback"
+            ),
+            "timestamp": feedback.created_at if feedback else None
+        })
 
     return render_template(
         "admin_feedback.html",
-        feedbacks=feedbacks
+        data=data
     )
 # =====================================================
 # View Questions
