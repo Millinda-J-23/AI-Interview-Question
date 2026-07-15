@@ -6,59 +6,72 @@
 
 <div class="container py-5">
 
-    <h2 class="mb-4">
+    <h2 class="mb-4 text-center">
         User Feedback
     </h2>
 
-    <table class="table table-bordered table-striped">
+    {% if data %}
 
-        <thead class="table-dark">
+    <div class="table-responsive">
 
-            <tr>
+        <table class="table table-bordered table-hover align-middle">
 
-                <th>ID</th>
-                <th>User</th>
-                <th>Rating</th>
-                <th>Feedback</th>
-                <th>Date</th>
+            <thead class="table-dark">
 
-            </tr>
+                <tr>
+                    <th>Username</th>
+                    <th>Rating</th>
+                    <th>Feedback</th>
+                    <th>Date & Time</th>
+                </tr>
 
-        </thead>
+            </thead>
 
-        <tbody>
+            <tbody>
 
-        {% for item in feedbacks %}
+                {% for item in data %}
 
-            <tr>
+                <tr>
 
-                <td>{{ item.id }}</td>
+                    <td>{{ item.username }}</td>
 
-                <td>{{ item.username }}</td>
+                    <td>
+                        {% if item.rating == "-" %}
+                            -
+                        {% else %}
+                            {{ item.rating }} ⭐
+                        {% endif %}
+                    </td>
 
-                <td>{{ item.rating }} ⭐</td>
+                    <td>
+                        {{ item.feedback }}
+                    </td>
 
-                <td>{{ item.feedback }}</td>
+                    <td>
+                        {% if item.timestamp %}
+                            {{ item.timestamp.strftime('%d-%m-%Y %I:%M %p') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
 
-                <td>{{ item.created_at }}</td>
+                </tr>
 
-            </tr>
+                {% endfor %}
 
-        {% else %}
+            </tbody>
 
-            <tr>
+        </table>
 
-                <td colspan="5" class="text-center">
-                    No feedback available.
-                </td>
+    </div>
 
-            </tr>
+    {% else %}
 
-        {% endfor %}
+    <div class="alert alert-info text-center">
+        No users found.
+    </div>
 
-        </tbody>
-
-    </table>
+    {% endif %}
 
 </div>
 
