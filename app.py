@@ -363,7 +363,7 @@ def result(history_id):
 
     record = InterviewHistory.query.get_or_404(history_id)
 
-    if record.username != current_user.username:
+    if current_user.username != "Millinda-J-23" and record.username != current_user.username:
         flash("Access Denied.", "danger")
         return redirect(url_for("history"))
 
@@ -458,7 +458,29 @@ def history():
         "history.html",
         records=records
     )
+# =====================================================
+# Admin Interview History
+# =====================================================
 
+@app.route("/admin/history")
+@login_required
+def admin_history():
+
+    # Only admin can access
+    if current_user.username != "Millinda-J-23":
+        flash("Access Denied.", "danger")
+        return redirect(url_for("dashboard"))
+
+    records = (
+        InterviewHistory.query
+        .order_by(InterviewHistory.created_at.desc())
+        .all()
+    )
+
+    return render_template(
+        "admin_history.html",
+        records=records
+    )
 # =====================================================
 # Admin Feedback
 # =====================================================
